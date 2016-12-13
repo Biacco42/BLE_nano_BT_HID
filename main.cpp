@@ -25,7 +25,7 @@ DigitalOut led1(LED1);
 
 static const char MANUFACTURERERS_NAME[] = "biacco42.info";
 static const char MODEL_NAME[] = "ErgoDox BT";
-static const char SERIAL_NUMBER[] = "X00000";
+static const char SERIAL_NUMBER[] = "X00";
 static const char HARDWARE_REVISION[] = "0.1";
 static const char FIRMWARE_REVISION[] = "0.1";
 static const char SOFTWARE_REVISION[] = "0.1";
@@ -44,8 +44,8 @@ static const uint8_t PASSKEY[6] = {'1','2','3','4','5','6'}; // must be 6-digits
 
 static const uint16_t uuid16_list[]        = {GattService::UUID_HUMAN_INTERFACE_DEVICE_SERVICE,
                                               GattService::UUID_DEVICE_INFORMATION_SERVICE,
-                                              GattService::UUID_BATTERY_SERVICE};
-//                                               GattService::UUID_SCAN_PARAMETERS_SERVICE};
+                                              GattService::UUID_BATTERY_SERVICE,
+                                              GattService::UUID_SCAN_PARAMETERS_SERVICE};
 static volatile bool  triggerSensorPolling = false;
 
 uint8_t hrmCounter = 100; // init HRM to 100bps
@@ -73,7 +73,7 @@ static void onConnect(const Gap::ConnectionCallbackParams_t *params) {
     BLEProtocol::Address_t peerAddresses[2];
     Gap::Whitelist_t whitelist;
     whitelist.size = 0;
-    whitelist.capacity = 3;
+    whitelist.capacity = 2;
     whitelist.addresses = peerAddresses;
     BLE::Instance(BLE::DEFAULT_INSTANCE).gap().getWhitelist(whitelist);
     // printf("getWhitelist %d\r\n", whitelist.size);
@@ -187,7 +187,7 @@ static void bleInitComplete(BLE::InitializationCompleteCallbackContext *params) 
     pc.printf("BLE before instantiate services\r\n");
     keyboardService = new KeyboardService(ble); 
     deviceInformationService = new DeviceInformationService(ble, MANUFACTURERERS_NAME, MODEL_NAME, SERIAL_NUMBER, HARDWARE_REVISION, FIRMWARE_REVISION, SOFTWARE_REVISION, &PNP_ID);
-    batteryService = new BatteryService(ble, 100, 5000); // BUG!!!!!!!!!!!!!!
+    batteryService = new BatteryService(ble, 100, 5000);
     scanParametersService = new ScanParametersService(ble);
     pc.printf("BLE after instantiate services\r\n");
 
@@ -231,7 +231,7 @@ static void bleInitComplete(BLE::InitializationCompleteCallbackContext *params) 
         BLEProtocol::Address_t peerAddresses[2];
         Gap::Whitelist_t whitelist;
         whitelist.size = 0;
-        whitelist.capacity = 3;
+        whitelist.capacity = 2;
         whitelist.addresses = peerAddresses;
         error = ble.securityManager().getAddressesFromBondTable(whitelist);
         // printf("getAddressesFromBondTable %d\r\n", whitelist.size);

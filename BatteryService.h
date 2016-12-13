@@ -46,8 +46,8 @@ public:
 		 {
 
 		// required for OS X bonding
-		SecurityManager::SecurityMode_t securityMode = SecurityManager::SECURITY_MODE_ENCRYPTION_NO_MITM;
-		batteryLevelCharacteristic.requireSecurity(securityMode);
+		// SecurityManager::SecurityMode_t securityMode = SecurityManager::SECURITY_MODE_ENCRYPTION_NO_MITM;
+		// batteryLevelCharacteristic.requireSecurity(securityMode);
 
 		GattCharacteristic *charTable[] = {&batteryLevelCharacteristic, &batteryVoltageCharacteristic};
 		GattService         batteryService(GattService::UUID_BATTERY_SERVICE, charTable, sizeof(charTable) / sizeof(GattCharacteristic *));
