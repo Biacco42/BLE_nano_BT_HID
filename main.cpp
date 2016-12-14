@@ -148,9 +148,9 @@ static void bleInitComplete(BLE::InitializationCompleteCallbackContext *params) 
     BLE &ble          = params->ble;
 
     /**< Minimum Connection Interval in 1.25 ms units, see BLE_GAP_CP_LIMITS.*/
-    uint16_t minConnectionInterval = Gap::MSEC_TO_GAP_DURATION_UNITS(15);
+    uint16_t minConnectionInterval = Gap::MSEC_TO_GAP_DURATION_UNITS(20);
     /**< Maximum Connection Interval in 1.25 ms units, see BLE_GAP_CP_LIMITS.*/
-    uint16_t maxConnectionInterval = Gap::MSEC_TO_GAP_DURATION_UNITS(20);
+    uint16_t maxConnectionInterval = Gap::MSEC_TO_GAP_DURATION_UNITS(24);
     /**< Slave Latency in number of connection events, see BLE_GAP_CP_LIMITS.*/
     uint16_t slaveLatency = 50;
     /**< Connection Supervision Timeout in 10 ms units, see BLE_GAP_CP_LIMITS.*/ 
@@ -199,7 +199,7 @@ static void bleInitComplete(BLE::InitializationCompleteCallbackContext *params) 
     );
     if (error != BLE_ERROR_NONE) goto return_error;
 
-    error = ble.gap().accumulateAdvertisingPayload(
+    error = ble.gap().accumulateScanResponse(
         GapAdvertisingData::COMPLETE_LIST_16BIT_SERVICE_IDS,
         (uint8_t*)uuid16_list, sizeof(uuid16_list)
     );
@@ -215,7 +215,7 @@ static void bleInitComplete(BLE::InitializationCompleteCallbackContext *params) 
     if (error != BLE_ERROR_NONE) goto return_error;
 
     // Set complete local name
-    error = ble.gap().accumulateAdvertisingPayload(
+    error = ble.gap().accumulateScanResponse(
         GapAdvertisingData::COMPLETE_LOCAL_NAME,
         DEVICE_NAME, sizeof(DEVICE_NAME)
     );
@@ -235,7 +235,7 @@ static void bleInitComplete(BLE::InitializationCompleteCallbackContext *params) 
         whitelist.addresses = peerAddresses;
         error = ble.securityManager().getAddressesFromBondTable(whitelist);
         // printf("getAddressesFromBondTable %d\r\n", whitelist.size);
-        BLE::Instance(BLE::DEFAULT_INSTANCE).gap().setWhitelist(whitelist);
+        ble.gap().setWhitelist(whitelist);
     }
 
     ble.gap().setAdvertisingPolicyMode(Gap::ADV_POLICY_IGNORE_WHITELIST);
