@@ -193,18 +193,15 @@ static void bleInitComplete(BLE::InitializationCompleteCallbackContext *params) 
 
     ble.gap().setPreferredConnectionParams(&connectionParams);
 
-    error = ble.gap().accumulateAdvertisingPayload(
-        GapAdvertisingData::BREDR_NOT_SUPPORTED |
-        GapAdvertisingData::LE_LIMITED_DISCOVERABLE
-    );
+    error = ble.gap().accumulateAdvertisingPayload( GapAdvertisingData::BREDR_NOT_SUPPORTED | GapAdvertisingData::LE_GENERAL_DISCOVERABLE );
     if (error != BLE_ERROR_NONE) goto return_error;
 
-    error = ble.gap().accumulateScanResponse(
+    error = ble.gap().accumulateAdvertisingPayload(
         GapAdvertisingData::COMPLETE_LIST_16BIT_SERVICE_IDS,
         (uint8_t*)uuid16_list, sizeof(uuid16_list)
     );
     if (error != BLE_ERROR_NONE) goto return_error;
-    
+
     // see 5.1.2: HID over GATT Specification (pg. 25)
     ble.gap().setAdvertisingType(GapAdvertisingParams::ADV_CONNECTABLE_UNDIRECTED);
     ble.gap().setAdvertisingInterval(1000);
