@@ -177,7 +177,7 @@ static void bleInitComplete(BLE::InitializationCompleteCallbackContext *params) 
     ble.securityManager().onSecuritySetupCompleted(securitySetupCompletedCallback);
 
     // bonding with hard-coded passkey.
-    error = ble.securityManager().init(ENABLE_BONDING, REQUIRE_MITM, SecurityManager::IO_CAPS_DISPLAY_ONLY, PASSKEY);
+    error = ble.securityManager().init(ENABLE_BONDING, REQUIRE_MITM, SecurityManager::IO_CAPS_KEYBOARD_ONLY, PASSKEY);
     if (error != BLE_ERROR_NONE) {
         // printf("error on ble.securityManager().init()");
         goto return_error;
